@@ -239,12 +239,13 @@ class SubscriptionBuilder
      * @param  \Stripe\PaymentMethod|string|null  $paymentMethod
      * @param  array  $customerOptions
      * @param  array  $subscriptionOptions
+     * @param  array  $opts
      * @return \Laravel\Cashier\Subscription
      *
      * @throws \Exception
      * @throws \Laravel\Cashier\Exceptions\IncompletePayment
      */
-    public function create($paymentMethod = null, array $customerOptions = [], array $subscriptionOptions = [])
+    public function create($paymentMethod = null, array $customerOptions = [], array $subscriptionOptions = [], array $opts = [])
     {
         if (empty($this->items)) {
             throw new Exception('At least one price is required when starting subscriptions.');
@@ -256,7 +257,7 @@ class SubscriptionBuilder
             ['customer' => $stripeCustomer->id],
             $this->buildPayload(),
             $subscriptionOptions
-        ));
+        ), sizeof($opts) ? $opts : null);
 
         $subscription = $this->createSubscription($stripeSubscription);
 
